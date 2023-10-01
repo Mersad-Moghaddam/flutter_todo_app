@@ -15,7 +15,8 @@ class TodoList extends StatefulWidget {
 
 class TodoListState extends State<TodoList> {
   late Future<List<Todo>> todos;
-
+  Widget checkIcon = const Icon(Icons.check_box_outline_blank_rounded);
+  bool check = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -70,12 +71,42 @@ class TodoListState extends State<TodoList> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          trailing: IconButton(
-                            onPressed: () async {
-                              await widget.databaseHelper.deleteTodo(todo.id!);
-                              widget.refreshCallBack();
-                            },
-                            icon: const Icon(Icons.delete),
+                          trailing: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  if (check == false) {
+                                    setState(() {
+                                      checkIcon = const Icon(
+                                        Icons.check_box,
+                                        color: Colors.green,
+                                      );
+                                      check = true;
+                                    });
+                                  } else if (check == true) {
+                                    setState(() {
+                                      checkIcon = const Icon(Icons
+                                          .check_box_outline_blank_rounded);
+                                      check = false;
+                                    });
+                                  }
+                                },
+                                icon: checkIcon,
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  await widget.databaseHelper
+                                      .deleteTodo(todo.id!);
+                                  widget.refreshCallBack();
+                                },
+                                icon: const Icon(
+                                  Icons.delete_rounded,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
